@@ -1,0 +1,1333 @@
+{
+	"info": {
+		"_postman_id": "d4cbe7e2-9b5f-4ae3-b121-5ad61c984b4e",
+		"name": "simphini-admin-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Client Token Login",
+					"item": [
+						{
+							"name": "Client Apps Login",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Valid Credentials\", () =>{\r",
+											"    pm.collectionVariables.set(\"clientToken\", pm.response.json().access_token);\r",
+											"    console.log(pm.collectionVariables.get(\"clientToken\"));\r",
+											"\r",
+											"    pm.response.to.have.status(200);\r",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"accept": true
+								}
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "client_id",
+											"value": "spa-client",
+											"type": "text"
+										},
+										{
+											"key": "client_secret",
+											"value": "secret",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{apiBaseUrl}}/clients/token",
+									"host": [
+										"{{apiBaseUrl}}"
+									],
+									"path": [
+										"clients",
+										"token"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Request Passphrase",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.collectionVariables.set(\"requestPayloadId\", pm.response.json().id);\r",
+											"pm.collectionVariables.set(\"requestPayloadPassPhrase\", pm.response.json().passPhrase);\r",
+											"console.log(pm.collectionVariables.get(\"requestPayloadId\") + ' - ' + pm.collectionVariables.get('requestPayloadPassPhrase'));\r",
+											"\r",
+											"pm.test(\"Valid Credentials\", () =>{\r",
+											"    pm.response.to.have.status(200);\r",
+											"})\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true,
+								"disabledSystemHeaders": {
+									"accept": true
+								}
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{clientToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{apiBaseUrl}}/payloads/generate",
+									"host": [
+										"{{apiBaseUrl}}"
+									],
+									"path": [
+										"payloads",
+										"generate"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Auth",
+					"item": [
+						{
+							"name": "Register",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"accept": true
+								}
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{clientToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "applicaiton/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "username",
+											"value": "test.user2",
+											"type": "text"
+										},
+										{
+											"key": "first_name",
+											"value": "test2",
+											"type": "text"
+										},
+										{
+											"key": "last_name",
+											"value": "user2",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "t.2021@test.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "test.2022",
+											"type": "text"
+										},
+										{
+											"key": "password_confirmation",
+											"value": "test.2022",
+											"type": "text"
+										},
+										{
+											"key": "phone_number",
+											"value": "09467067649",
+											"type": "text"
+										}
+									],
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{apiBaseUrl}}/auth/register",
+									"host": [
+										"{{apiBaseUrl}}"
+									],
+									"path": [
+										"auth",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Login",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"accept": true
+								}
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{clientToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "email",
+											"value": "09467067649",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "test.2022",
+											"type": "text"
+										},
+										{
+											"key": "session",
+											"value": "1",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{apiBaseUrl}}/auth/login",
+									"host": [
+										"{{apiBaseUrl}}"
+									],
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Phone Verfication",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{apiBaseUrl}}/auth/register/phone_verify_code?code=2512",
+									"host": [
+										"{{apiBaseUrl}}"
+									],
+									"path": [
+										"auth",
+										"register",
+										"phone_verify_code"
+									],
+									"query": [
+										{
+											"key": "code",
+											"value": "2512"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "admin",
+					"item": [
+						{
+							"name": "shop",
+							"item": [
+								{
+									"name": "shop->disbursement",
+									"item": [
+										{
+											"name": "shop->dirsbursement-list",
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{apiBaseUrl}}/admin/disbursements",
+													"host": [
+														"{{apiBaseUrl}}"
+													],
+													"path": [
+														"admin",
+														"disbursements"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "add-disbursement",
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "formdata",
+													"formdata": [
+														{
+															"key": "user_id",
+															"value": "b2e820b9-dd3c-411d-b3a0-0053913a22e5",
+															"type": "text"
+														},
+														{
+															"key": "amount",
+															"value": "300",
+															"type": "text"
+														},
+														{
+															"key": "shop_id",
+															"value": "01cd1a6e-1195-417f-b49c-e3220ed4d831",
+															"type": "text"
+														}
+													]
+												},
+												"url": {
+													"raw": "http://127.0.0.1:8000/v1/admin/disbursements/create",
+													"protocol": "http",
+													"host": [
+														"127",
+														"0",
+														"0",
+														"1"
+													],
+													"port": "8000",
+													"path": [
+														"v1",
+														"admin",
+														"disbursements",
+														"create"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "shop-list",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{apiBaseUrl}}/admin/shops",
+											"host": [
+												"{{apiBaseUrl}}"
+											],
+											"path": [
+												"admin",
+												"shops"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "shop-view",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{apiBaseUrl}}/admin/shops/view/01cd1a6e-1195-417f-b49c-e3220ed4d831",
+											"host": [
+												"{{apiBaseUrl}}"
+											],
+											"path": [
+												"admin",
+												"shops",
+												"view",
+												"01cd1a6e-1195-417f-b49c-e3220ed4d831"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "update-details",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "urlencoded",
+											"urlencoded": [
+												{
+													"key": "description",
+													"value": "working updatesdwas",
+													"type": "text"
+												},
+												{
+													"key": "number",
+													"value": "4343343342",
+													"type": "text"
+												},
+												{
+													"key": "status",
+													"value": "1",
+													"type": "text"
+												},
+												{
+													"key": "shop_name",
+													"value": "Heathcote and Sonssss",
+													"type": "text"
+												},
+												{
+													"key": "tin",
+													"value": "352805426994184922",
+													"type": "text"
+												},
+												{
+													"key": "pd_name",
+													"value": "John Doesss",
+													"type": "text"
+												},
+												{
+													"key": "pd_address",
+													"value": "32",
+													"type": "text"
+												},
+												{
+													"key": "pd_district",
+													"value": "Disctrictss",
+													"type": "text"
+												},
+												{
+													"key": "pd_city_id",
+													"value": "12",
+													"type": "text"
+												},
+												{
+													"key": "pd_number",
+													"value": "09232322322",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "http://127.0.0.1:8000/v1/admin/shops/update/01cd1a6e-1195-417f-b49c-e3220ed4d831",
+											"protocol": "http",
+											"host": [
+												"127",
+												"0",
+												"0",
+												"1"
+											],
+											"port": "8000",
+											"path": [
+												"v1",
+												"admin",
+												"shops",
+												"update",
+												"01cd1a6e-1195-417f-b49c-e3220ed4d831"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Idol Mall-> Products",
+							"item": [
+								{
+									"name": "product-list",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{apiBaseUrl}}/admin/IMproducts",
+											"host": [
+												"{{apiBaseUrl}}"
+											],
+											"path": [
+												"admin",
+												"IMproducts"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "product-view",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{apiBaseUrl}}/admin/IMproducts/view/2",
+											"host": [
+												"{{apiBaseUrl}}"
+											],
+											"path": [
+												"admin",
+												"IMproducts",
+												"view",
+												"2"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "product-delete",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{apiBaseUrl}}/admin/IMproducts/delete/",
+											"host": [
+												"{{apiBaseUrl}}"
+											],
+											"path": [
+												"admin",
+												"IMproducts",
+												"delete",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Product add",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "product_name",
+													"value": "test product",
+													"type": "text"
+												},
+												{
+													"key": "live_price",
+													"value": "300",
+													"type": "text"
+												},
+												{
+													"key": "category_id",
+													"value": "3",
+													"type": "text"
+												},
+												{
+													"key": "status",
+													"value": "1",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "http://127.0.0.1:8000/v1/admin/IMproducts/add",
+											"protocol": "http",
+											"host": [
+												"127",
+												"0",
+												"0",
+												"1"
+											],
+											"port": "8000",
+											"path": [
+												"v1",
+												"admin",
+												"IMproducts",
+												"add"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Dashboard",
+							"item": [
+								{
+									"name": "Dashboard->index",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": ""
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Shop Unapproved List",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": ""
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Product Unapproved List",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": ""
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Activity Log List",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": ""
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Notification",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": ""
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "User",
+							"item": [
+								{
+									"name": "User List",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": ""
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "User View",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": ""
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "User update",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": ""
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Seller",
+							"item": [
+								{
+									"name": "Seller -> product",
+									"item": [
+										{
+											"name": "product list",
+											"request": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": ""
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "product add",
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "formdata",
+													"formdata": [
+														{
+															"key": "gallery_url",
+															"value": "test1",
+															"type": "text"
+														},
+														{
+															"key": "product_name",
+															"value": "test_prod2",
+															"type": "text"
+														},
+														{
+															"key": "product_description",
+															"value": "test description2",
+															"type": "text"
+														},
+														{
+															"key": "condition",
+															"value": "test2",
+															"type": "text"
+														},
+														{
+															"key": "category_main_id",
+															"value": "2",
+															"type": "text"
+														},
+														{
+															"key": "category_sub_id",
+															"value": "2",
+															"type": "text"
+														},
+														{
+															"key": "seller_id",
+															"value": "2",
+															"type": "text"
+														},
+														{
+															"key": "normal_price",
+															"value": "500",
+															"type": "text"
+														},
+														{
+															"key": "discount_price",
+															"value": "350",
+															"type": "text"
+														},
+														{
+															"key": "stock",
+															"value": "5",
+															"type": "text"
+														},
+														{
+															"key": "shipping_id",
+															"value": "2",
+															"type": "text"
+														},
+														{
+															"key": "condition",
+															"value": "2",
+															"type": "text"
+														},
+														{
+															"key": "status",
+															"value": "1",
+															"type": "text"
+														},
+														{
+															"key": "category_name",
+															"value": "cat1",
+															"type": "text"
+														},
+														{
+															"key": "category_description",
+															"value": "category description",
+															"type": "text"
+														},
+														{
+															"key": "sub_category_name",
+															"value": "cat_sub1",
+															"type": "text"
+														},
+														{
+															"key": "sub_category_description",
+															"value": "category sub description",
+															"type": "text"
+														},
+														{
+															"key": "variation_name",
+															"value": "variation name",
+															"type": "text"
+														},
+														{
+															"key": "img",
+															"value": "1",
+															"type": "text"
+														},
+														{
+															"key": "seller_product_id",
+															"value": "1",
+															"type": "text"
+														},
+														{
+															"key": "img_url",
+															"type": "file",
+															"src": "/C:/Users/Ryota/Pictures/sample.jpg"
+														},
+														{
+															"key": "option",
+															"value": "1",
+															"type": "text"
+														},
+														{
+															"key": "variations_id",
+															"value": "1",
+															"type": "text"
+														}
+													]
+												},
+												"url": {
+													"raw": "http://127.0.0.1:8000/v1/admin/seller_products/add",
+													"protocol": "http",
+													"host": [
+														"127",
+														"0",
+														"0",
+														"1"
+													],
+													"port": "8000",
+													"path": [
+														"v1",
+														"admin",
+														"seller_products",
+														"add"
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "product edit",
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "formdata",
+													"formdata": [
+														{
+															"key": "gallery_url",
+															"value": "gall_url22",
+															"type": "text"
+														},
+														{
+															"key": "product_name",
+															"value": "test_prod20212",
+															"type": "text"
+														},
+														{
+															"key": "product_description",
+															"value": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus faucibus mi ut arcu congue, id pretium neque dapibus. Nullam purus lorem, tincidunt aliquet magna a, venenatis hendrerit nibh2",
+															"type": "text"
+														},
+														{
+															"key": "normal_price",
+															"value": "700",
+															"type": "text"
+														},
+														{
+															"key": "discount_price",
+															"value": "500",
+															"type": "text"
+														},
+														{
+															"key": "stock",
+															"value": "11",
+															"type": "text"
+														},
+														{
+															"key": "condition",
+															"value": "3",
+															"type": "text"
+														},
+														{
+															"key": "status",
+															"value": "2",
+															"type": "text"
+														},
+														{
+															"key": "category_name",
+															"value": "cat2",
+															"type": "text"
+														},
+														{
+															"key": "category_description",
+															"value": "category Lorem ipsum dolor sit amet",
+															"type": "text"
+														},
+														{
+															"key": "sub_category_name",
+															"value": "sub_category_1",
+															"type": "text"
+														},
+														{
+															"key": "sub_category_description",
+															"value": "category sub description Lorem ipsum dolor sit amet",
+															"type": "text"
+														},
+														{
+															"key": "variation_name",
+															"value": "variation_2022",
+															"type": "text"
+														},
+														{
+															"key": "img",
+															"value": "23",
+															"type": "text"
+														},
+														{
+															"key": "img_url",
+															"type": "file",
+															"src": []
+														},
+														{
+															"key": "option",
+															"value": "20",
+															"type": "text"
+														}
+													]
+												},
+												"url": {
+													"raw": "http://127.0.0.1:8000/v1/admin/seller_products/edit/38",
+													"protocol": "http",
+													"host": [
+														"127",
+														"0",
+														"0",
+														"1"
+													],
+													"port": "8000",
+													"path": [
+														"v1",
+														"admin",
+														"seller_products",
+														"edit",
+														"38"
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "User seller list",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": ""
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "User Seller View",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": ""
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Buyer",
+							"item": [
+								{
+									"name": "User buyer list",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": ""
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "User buyer View",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": ""
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "ads",
+							"item": [
+								{
+									"name": "ads list",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://127.0.0.1:8000/v1/admin/ads",
+											"protocol": "http",
+											"host": [
+												"127",
+												"0",
+												"0",
+												"1"
+											],
+											"port": "8000",
+											"path": [
+												"v1",
+												"admin",
+												"ads"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "ads create",
+									"protocolProfileBehavior": {
+										"disabledSystemHeaders": {
+											"connection": true
+										}
+									},
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "name",
+													"type": "file",
+													"src": "/C:/Users/Ryota/Pictures/rim3.jpg"
+												},
+												{
+													"key": "is_active",
+													"value": "1",
+													"type": "text"
+												},
+												{
+													"key": "category",
+													"value": "main_product",
+													"type": "text"
+												},
+												{
+													"key": "device",
+													"value": "web",
+													"type": "text"
+												},
+												{
+													"key": "meta",
+													"value": "test",
+													"type": "text"
+												},
+												{
+													"key": "owner_id",
+													"value": "1",
+													"type": "text"
+												},
+												{
+													"key": "owner_type",
+													"value": "ads",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "http://127.0.0.1:8000/v1/admin/ads/add",
+											"protocol": "http",
+											"host": [
+												"127",
+												"0",
+												"0",
+												"1"
+											],
+											"port": "8000",
+											"path": [
+												"v1",
+												"admin",
+												"ads",
+												"add"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "order",
+							"item": [
+								{
+									"name": "list",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": ""
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "view",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": ""
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "delete",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": ""
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "add",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "user_id",
+													"value": "test3",
+													"type": "text"
+												},
+												{
+													"key": "product_id",
+													"value": "prod3",
+													"type": "text"
+												},
+												{
+													"key": "status",
+													"value": "online",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "http://127.0.0.1:8000/v1/admin/order/add",
+											"protocol": "http",
+											"host": [
+												"127",
+												"0",
+												"0",
+												"1"
+											],
+											"port": "8000",
+											"path": [
+												"v1",
+												"admin",
+												"order",
+												"add"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "update",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": ""
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "requestPayload",
+			"value": {
+				"id": "bf642624-d6f4-4a8d-9417-316ea6bde154",
+				"passPhrase": "09tcS8NDN2O69GFE"
+			}
+		},
+		{
+			"key": "clientToken",
+			"value": "493|9zyLau0rKW5Yzcn3BZnIFwBiEUAVxwPTo3FiV3lR"
+		},
+		{
+			"key": "requestPayloadId",
+			"value": "699003d5-f022-43c8-9421-c521719ca64d"
+		},
+		{
+			"key": "requestPayloadPassPhrase",
+			"value": "k74KUVAwA4W2dKck"
+		},
+		{
+			"key": "body",
+			"value": "{\"id\":\"699003d5-f022-43c8-9421-c521719ca64d\",\"payload\":\"{\\\"ct\\\":\\\"/TDVAAusfVU6ilXFnrToDMK8WbRoXLsTHnPfTx2QfJ0D0RJ13QU7l8DIiXw9vU363rZ1Gsxy9hoEYadunKHE5nsNhHZyC5KrDNhr/l6j5qe5HNL4aHIt2iqVeJn5zwlsHRpAvlMM25dCdrhzJCb9sQ==\\\",\\\"iv\\\":\\\"6ff44211218b10af7633b843834acdf7\\\",\\\"s\\\":\\\"4fc8e300bc72ef6a\\\"}\"}"
+		},
+		{
+			"key": "apiBaseUrl",
+			"value": "http://127.0.0.1:8000/v1"
+		},
+		{
+			"key": "userToken",
+			"value": "2|LXBedWuBTkBgAO2e5QMHmK21bfNhFcEhO8iZk4Gt"
+		}
+	]
+}
